@@ -1,2 +1,2 @@
 # EcoRotaApi
-Backend da aplicação EcoRota
+API Rest da aplicação EcoRota
