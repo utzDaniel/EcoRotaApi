@@ -1,5 +1,6 @@
 package ecorota.api.infra.security;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import ecorota.api.repository.UsuarioRepository;
 import ecorota.api.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -36,7 +37,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+        }else
+            System.err.println("SEM TOKEN");
+        //throw new JWTVerificationException("SEM TOKEN");
+
+
 
         filterChain.doFilter(request, response);
     }

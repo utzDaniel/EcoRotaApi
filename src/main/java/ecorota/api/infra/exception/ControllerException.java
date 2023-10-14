@@ -1,18 +1,18 @@
 package ecorota.api.infra.exception;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
 
 @RestControllerAdvice
 public class ControllerException {
@@ -22,21 +22,21 @@ public class ControllerException {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<DadosErroValidacao>> tratarErro400(MethodArgumentNotValidException ex) {
-        var erros = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
+    public ResponseEntity<ObjetoException> tratarErro400(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        var obj = ObjetoExceptionFactory.create(ex, req);
+        return ResponseEntity.badRequest().body(obj);
 
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
-        return ResponseEntity.status(403).body("Acesso negado");
+        return ResponseEntity.status(403).body("Acesso negado Controller");
     }
 
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas 4");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -56,10 +56,19 @@ public class ControllerException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + ex.getLocalizedMessage());
     }
 
-    private record DadosErroValidacao(String campo, String mensagem) {
-        public DadosErroValidacao(FieldError erro) {
-            this(erro.getField(), erro.getDefaultMessage());
-        }
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<Object> tokenExpirado(TokenExpiredException ex) {
+        return ResponseEntity.status(403).body("Token JWT expirado!");
+    }
+
+    @ExceptionHandler(JWTDecodeException.class)
+    public ResponseEntity<Object> tokenInvalido(JWTDecodeException ex) {
+        return ResponseEntity.status(403).body("Token JWT inválido!");
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> semTratamento(RuntimeException ex) {
+        return ResponseEntity.status(500).body(ex.getMessage());
     }
 
 }

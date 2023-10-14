@@ -4,16 +4,17 @@ import ecorota.api.controller.dto.request.usuario.UsuarioAtualizarRequest;
 import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
 import ecorota.api.controller.dto.response.CriarResponse;
 import ecorota.api.controller.dto.response.UsuarioResponse;
+import ecorota.api.infra.exception.SenhaImcompletaException;
+import ecorota.api.repository.UsuarioRepository;
 import ecorota.api.repository.entity.Usuario;
 import ecorota.api.service.factory.UsuarioFactory;
 import ecorota.api.service.mapper.UsuarioMapper;
-import ecorota.api.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UsuarioService {
@@ -24,29 +25,37 @@ public class UsuarioService {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
-    @Autowired
-    private UsuarioFactory usuarioFactory;
 
     @Transactional
     public CriarResponse cadastrar(UsuarioCriarRequest request) {
-        var usuario = usuarioFactory.create(request);
+        var usuario = UsuarioFactory.create(request);
         usuarioRepository.save(usuario);
         var resp = usuarioMapper.parse(usuario);
         return new CriarResponse(usuario.getId(), resp);
     }
 
     @Transactional
-    public UsuarioResponse atualizar(UsuarioAtualizarRequest request) {
-        var usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var senha = usuarioFactory.senha(request.getSenha());
-        usuarioRepository.update(usuarioLogado.getUsername(), request.getNome(), senha);
-        usuarioLogado.setNome(request.getNome());
-        return usuarioMapper.parse(usuarioLogado);
+    public UsuarioResponse atualizar(UsuarioAtualizarRequest request, Usuario usuario) {
+        var usuarioBase = usuarioRepository.findByEmail(usuario.getEmail());
+        var alterarSenha = validarCampoSenhas(request.getNovaSenha(), request.getNovaSenhaRepetida());
+
+        if (alterarSenha && (!request.getNovaSenha().equals(request.getNovaSenhaRepetida()))) {
+            throw new SenhaImcompletaException("Senhas não conferem, tente novamente");
+        }
+
+        if (!UsuarioFactory.isSenha(request.getSenhaAtual(), usuarioBase.getPassword())) {
+            throw new SenhaImcompletaException("Senha atual não confere, tente novamente");
+        }
+
+        var senha = alterarSenha ? UsuarioFactory.criptografarSenha(request.getNovaSenha()) : usuarioBase.getPassword();
+
+        usuarioRepository.update(usuario.getEmail(), request.getNome(), senha);
+        usuario.setNome(request.getNome());
+        return usuarioMapper.parse(usuario);
     }
 
-    public UsuarioResponse buscar() {
-        var usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return usuarioMapper.parse(usuarioLogado);
+    public UsuarioResponse buscar(Usuario usuario) {
+        return usuarioMapper.parse(usuario);
     }
 
     public UsuarioResponse buscarPorId(Long id) {
@@ -65,4 +74,9 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
+    private boolean validarCampoSenhas(String senhaNova, String senhaNovaRepetida) {
+        var campoSenha = Objects.isNull(senhaNova) || senhaNova.isEmpty();
+        var campoSenhaRepetida = Objects.isNull(senhaNovaRepetida) || senhaNovaRepetida.isEmpty();
+        return !campoSenha && !campoSenhaRepetida;
+    }
 }

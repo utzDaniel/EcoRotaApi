@@ -4,6 +4,7 @@ import ecorota.api.controller.dto.request.usuario.UsuarioAtualizarRequest;
 import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
 import ecorota.api.controller.dto.response.UsuarioResponse;
 import ecorota.api.enun.Role;
+import ecorota.api.repository.entity.Usuario;
 import ecorota.api.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,16 +35,16 @@ public class UsuarioController {
     @PutMapping
     @Secured(value = Role.USUARIO)
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<UsuarioResponse> atualizar(@RequestBody @Valid UsuarioAtualizarRequest request) {
-        var resp = usuarioService.atualizar(request);
+    public ResponseEntity<UsuarioResponse> atualizar(@RequestBody @Valid UsuarioAtualizarRequest request, @AuthenticationPrincipal Usuario usuario) {
+        var resp = usuarioService.atualizar(request, usuario);
         return ResponseEntity.ok(resp);
     }
 
     @GetMapping()
     @Secured(value = Role.USUARIO)
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<UsuarioResponse> buscar() {
-        var usario = usuarioService.buscar();
+    public ResponseEntity<UsuarioResponse> buscar(@AuthenticationPrincipal Usuario usuario) {
+        var usario = usuarioService.buscar(usuario);
         return ResponseEntity.ok(usario);
     }
 

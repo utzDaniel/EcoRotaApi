@@ -12,8 +12,14 @@ import lombok.NoArgsConstructor;
 public class UsuarioAtualizarRequest extends UsuarioBaseRequest {
 
     @Getter
+    private String novaSenha;
+
+    @Getter
+    private String novaSenhaRepetida;
+
+    @Getter
     @NotNull(message = "Não deve ser nulo")
     @NotBlank(message = "Não deve estar em branco")
-    private String senha;
+    private String senhaAtual;
 
 }
