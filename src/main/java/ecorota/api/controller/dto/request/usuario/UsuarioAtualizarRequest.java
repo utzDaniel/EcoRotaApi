@@ -1,17 +1,19 @@
-package ecorota.api.dto.request.usuario;
+package ecorota.api.controller.dto.request.usuario;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-public abstract class UsuarioBaseRequest {
 
+@NoArgsConstructor
+@AllArgsConstructor
+public class UsuarioAtualizarRequest extends UsuarioBaseRequest {
+
+    @Getter
     @NotNull(message = "Não deve ser nulo")
     @NotBlank(message = "Não deve estar em branco")
-    protected String nome;
+    private String senha;
 
 }

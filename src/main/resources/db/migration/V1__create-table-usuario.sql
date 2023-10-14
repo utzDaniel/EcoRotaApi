@@ -1,10 +1,20 @@
-create table usuario(
-    id bigint not null auto_increment,
-    nome varchar(100) not null,
-    login varchar(20) not null,
-    senha varchar(100) not null,
-    role varchar(10) not null,
-    primary key(id)
-);
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `role` varchar(30) NOT NULL,
+  `ativo` tinyint(1) NOT NULL,
+  `codigo_verificador` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_USUARIO_EMAIL` (`email`),
+  KEY `IDX_USUARIO_EMAIL` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into usuario (nome, login, senha, role) value("Daniel","utzDaniel","$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.","ADMIN")
+LOCK TABLES `usuarios` WRITE;
+INSERT INTO `usuarios` (nome, email, senha, role, ativo)
+VALUE("Daniel", "danieldosanjos.36@gmail.com","$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.", "ADMIN", 1);
+UNLOCK TABLES;
+
+

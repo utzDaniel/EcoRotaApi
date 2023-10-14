@@ -1,15 +1,19 @@
 package ecorota.api.service;
 
-import ecorota.api.dto.request.usuario.UsuarioAtualizarRequest;
-import ecorota.api.dto.request.usuario.UsuarioCriarRequest;
-import ecorota.api.dto.response.CriarResponse;
-import ecorota.api.dto.response.UsuarioResponse;
-import ecorota.api.factory.UsuarioFactory;
-import ecorota.api.mapper.UsuarioMapper;
+import ecorota.api.controller.dto.request.usuario.UsuarioAtualizarRequest;
+import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
+import ecorota.api.controller.dto.response.CriarResponse;
+import ecorota.api.controller.dto.response.UsuarioResponse;
+import ecorota.api.repository.entity.Usuario;
+import ecorota.api.service.factory.UsuarioFactory;
+import ecorota.api.service.mapper.UsuarioMapper;
 import ecorota.api.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -33,18 +37,32 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioResponse atualizar(UsuarioAtualizarRequest request) {
-        var usuario = usuarioRepository.getReferenceById(request.getId());
-        usuario.setNome(request.getNome());
+        var usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var senha = usuarioFactory.senha(request.getSenha());
+        usuarioRepository.update(usuarioLogado.getUsername(), request.getNome(), senha);
+        usuarioLogado.setNome(request.getNome());
+        return usuarioMapper.parse(usuarioLogado);
+    }
+
+    public UsuarioResponse buscar() {
+        var usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usuarioMapper.parse(usuarioLogado);
+    }
+
+    public UsuarioResponse buscarPorId(Long id) {
+        var usuario = usuarioRepository.getReferenceById(id);
         return usuarioMapper.parse(usuario);
     }
 
-    public UsuarioResponse buscar(Long id) {
-        var usuario = usuarioRepository.getReferenceById(id);
-        return usuarioMapper.parse(usuario);
+    public List<UsuarioResponse> listar() {
+        return usuarioRepository.findAll().stream()
+                .map(u -> usuarioMapper.parse(u))
+                .toList();
     }
 
     @Transactional
     public void deletar(Long id) {
         usuarioRepository.deleteById(id);
     }
+
 }

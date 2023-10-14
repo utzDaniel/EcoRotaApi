@@ -1,4 +1,4 @@
-package ecorota.api.dto.response;
+package ecorota.api.controller.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

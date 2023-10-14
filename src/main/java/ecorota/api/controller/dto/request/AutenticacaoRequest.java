@@ -1,4 +1,4 @@
-package ecorota.api.dto.request;
+package ecorota.api.controller.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ public class AutenticacaoRequest {
 
     @NotBlank
     @NotNull
-    private String login;
+    private String email;
     @NotBlank
     @NotNull
     private String senha;

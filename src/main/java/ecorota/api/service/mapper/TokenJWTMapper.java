@@ -1,6 +1,6 @@
-package ecorota.api.mapper;
+package ecorota.api.service.mapper;
 
-import ecorota.api.dto.response.TokenJWTResponse;
+import ecorota.api.controller.dto.response.TokenJWTResponse;
 
 public class TokenJWTMapper {
 

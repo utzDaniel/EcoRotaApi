@@ -1,9 +1,9 @@
 package ecorota.api.controller;
 
-import ecorota.api.dto.request.AutenticacaoRequest;
-import ecorota.api.dto.response.TokenJWTResponse;
-import ecorota.api.entity.Usuario;
-import ecorota.api.mapper.TokenJWTMapper;
+import ecorota.api.controller.dto.request.AutenticacaoRequest;
+import ecorota.api.controller.dto.response.TokenJWTResponse;
+import ecorota.api.repository.entity.Usuario;
+import ecorota.api.service.mapper.TokenJWTMapper;
 import ecorota.api.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity<TokenJWTResponse> login(@RequestBody @Valid AutenticacaoRequest request) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(request.getLogin(), request.getSenha());
-        var authentication = manager.authenticate(authenticationToken);
-        var token = tokenService.gerar((Usuario) authentication.getPrincipal());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha());
+        var authentication = this.manager.authenticate(authenticationToken);
+        var token = this.tokenService.gerar((Usuario) authentication.getPrincipal());
         var resp = new TokenJWTMapper().parse(token);
         return ResponseEntity.ok().body(resp);
     }

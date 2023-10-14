@@ -1,8 +1,8 @@
 package EcoRota.api.controller;
 
-import ecorota.api.dto.request.usuario.UsuarioCriarRequest;
-import ecorota.api.dto.response.CriarResponse;
-import ecorota.api.dto.response.UsuarioResponse;
+import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
+import ecorota.api.controller.dto.response.CriarResponse;
+import ecorota.api.controller.dto.response.UsuarioResponse;
 import ecorota.api.service.UsuarioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,8 +56,8 @@ class UsuarioControllerTest {
         var jsonEsperado = respUsuarioJson.write(objEsperado).getJson();
 
         when(usuarioService.cadastrar(objReq))
-                .thenReturn(new CriarResponse(2L, new UsuarioResponse(objReq.getNome(), objReq.getLogin())));
-        
+                .thenReturn(new CriarResponse(2L, new UsuarioResponse(objReq.getNome(), objReq.getEmail())));
+
         var resp = mockMvc.perform(
                         post("/usuario")
                                 .contentType(MediaType.APPLICATION_JSON)

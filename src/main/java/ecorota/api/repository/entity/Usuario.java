@@ -1,4 +1,4 @@
-package ecorota.api.entity;
+package ecorota.api.repository.entity;
 
 import ecorota.api.enun.Role;
 import jakarta.persistence.*;
@@ -10,27 +10,42 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "usuario")
-@Entity(name = "Usuario")
 @Getter
+@Entity(name = "Usuario")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Table(name = "usuarios", indexes = {@Index(name = "idx_usuario_email", columnList = "email")})
 public final class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Setter
+    @Column(name = "nome", nullable = false)
     private String nome;
-    private String login;
+
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    @Column(name = "senha", nullable = false)
     private String senha;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "ativo", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean ativo;
+
+    @Column(name = "codigo_verificador", length = 6)
+    private String codigoVerificador;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.role.name()));
+        if (this.role == Role.ADMIN)
+            return List.of(new SimpleGrantedAuthority(Role.ADMINISTRADOR), new SimpleGrantedAuthority(Role.USUARIO));
+        else return List.of(new SimpleGrantedAuthority(Role.USUARIO));
     }
 
     @Override
@@ -40,7 +55,7 @@ public final class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.login;
+        return this.email;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package EcoRota.api.repository;
 
-import ecorota.api.entity.Usuario;
+import ecorota.api.repository.entity.Usuario;
 import ecorota.api.enun.Role;
 import ecorota.api.repository.UsuarioRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -30,13 +30,13 @@ class UsuarioRepositoryTest {
     void buscarLogin() {
         var a15 = "a15";
         var usuario = criarUsuario(a15, a15, a15, Role.USER);
-        var usuarioBase = usuarioRepository.buscarLogin(usuario.getLogin());
+        var usuarioBase = usuarioRepository.findByEmail(usuario.getEmail());
         assertThat(usuarioBase).isEqualTo(usuario);
     }
 
 
-    private Usuario criarUsuario(String nome, String login, String senha, Role role) {
-        var usuario = new Usuario(null, nome, login, senha, role);
+    private Usuario criarUsuario(String nome, String email, String senha, Role role) {
+        var usuario = new Usuario(null, nome, email, senha, role, true, null);
         em.persist(usuario);
         return usuario;
     }
