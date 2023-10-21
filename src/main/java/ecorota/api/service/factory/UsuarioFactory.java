@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 public class UsuarioFactory {
 
     @Autowired
-    private static PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    public static Usuario create(UsuarioCriarRequest req) {
+    public Usuario create(UsuarioCriarRequest req) {
         return new Usuario(null, req.getNome(), req.getEmail(), criptografarSenha(req.getSenha()), Role.USER, true, null);
     }
 
-    public static String criptografarSenha(String senha) {
+    public String criptografarSenha(String senha) {
         return passwordEncoder.encode(senha);
     }
 
-    public static boolean isSenha(String atualReq, String atualBase) {
+    public boolean isSenha(String atualReq, String atualBase) {
         return passwordEncoder.matches(atualReq, atualBase);
     }
 }

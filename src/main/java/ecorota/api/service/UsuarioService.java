@@ -24,11 +24,12 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioMapper usuarioMapper;
-
+    @Autowired
+    private UsuarioFactory factory;
 
     @Transactional
     public CriarResponse cadastrar(UsuarioCriarRequest request) {
-        var usuario = UsuarioFactory.create(request);
+        var usuario = factory.create(request);
         usuarioRepository.save(usuario);
         var resp = usuarioMapper.parse(usuario);
         return new CriarResponse(usuario.getId(), resp);
@@ -43,11 +44,11 @@ public class UsuarioService {
             throw new SenhaImcompletaException("Senhas não conferem, tente novamente");
         }
 
-        if (!UsuarioFactory.isSenha(request.getSenhaAtual(), usuarioBase.getPassword())) {
+        if (!factory.isSenha(request.getSenhaAtual(), usuarioBase.getPassword())) {
             throw new SenhaImcompletaException("Senha atual não confere, tente novamente");
         }
 
-        var senha = alterarSenha ? UsuarioFactory.criptografarSenha(request.getNovaSenha()) : usuarioBase.getPassword();
+        var senha = alterarSenha ? factory.criptografarSenha(request.getNovaSenha()) : usuarioBase.getPassword();
 
         usuarioRepository.update(usuario.getEmail(), request.getNome(), senha);
         usuario.setNome(request.getNome());
