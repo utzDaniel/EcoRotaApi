@@ -2,6 +2,7 @@ package ecorota.api.controller;
 
 import ecorota.api.controller.dto.request.usuario.UsuarioAtualizarRequest;
 import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
+import ecorota.api.controller.dto.request.usuario.UsuarioPreferenciaAtualizarRequest;
 import ecorota.api.controller.dto.response.UsuarioResponse;
 import ecorota.api.enun.Role;
 import ecorota.api.repository.entity.Usuario;
@@ -37,6 +38,14 @@ public class UsuarioController {
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     public ResponseEntity<UsuarioResponse> atualizar(@RequestBody @Valid UsuarioAtualizarRequest request, @AuthenticationPrincipal Usuario usuario) {
         var resp = usuarioService.atualizar(request, usuario);
+        return ResponseEntity.ok(resp);
+    }
+
+    @PutMapping("/preferencia")
+    @Secured(value = Role.USUARIO)
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    public ResponseEntity<UsuarioResponse> atualizarPreferencia(@RequestBody @Valid UsuarioPreferenciaAtualizarRequest request, @AuthenticationPrincipal Usuario usuario) {
+        var resp = usuarioService.atualizarPreferencia(request, usuario);
         return ResponseEntity.ok(resp);
     }
 

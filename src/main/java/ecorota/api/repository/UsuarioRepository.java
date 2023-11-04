@@ -13,13 +13,30 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Modifying
     @Query(value = """
             update
-                usuario as u
+                usuarios as u
             set
-                u.nome = :nome,
-                u.senha = :senha
+                u.nom = :nome,
+                u.sen = :senha
             where
-                u.email = :email
+                u.eml = :email
             """, nativeQuery = true)
     void update(@Param("email") String email, @Param("nome") String nome, @Param("senha") String senha);
 
+    @Modifying
+    @Query(value = """
+            update
+                usuarios as u
+            set
+                u.onb_atv = :onibus,
+                u.mtr_atv = :metro,
+                u.bcc_atv = :bicicleta,
+                u.id_opc_tjt = :opcao
+            where
+                u.eml = :email
+            """, nativeQuery = true)
+    void updatePreferencia(@Param("email") String email,
+                           @Param("onibus") boolean onibusAtivo,
+                           @Param("metro") boolean metroAtivo,
+                           @Param("bicicleta") boolean bicicletaAtivo,
+                           @Param("opcao") int opcaoTrajeto);
 }

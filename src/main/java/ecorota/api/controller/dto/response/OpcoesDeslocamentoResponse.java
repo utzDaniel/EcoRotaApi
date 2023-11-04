@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioResponse {
+public class OpcoesDeslocamentoResponse {
 
-    private String nome;
-    private String email;
-    private PreferenciaResponse preferencia;
+    private List<DeslocamentoResponse> deslocamento;
+    private boolean escolhida;
 
 }

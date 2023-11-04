@@ -2,8 +2,10 @@ package ecorota.api.service;
 
 import ecorota.api.controller.dto.request.usuario.UsuarioAtualizarRequest;
 import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
+import ecorota.api.controller.dto.request.usuario.UsuarioPreferenciaAtualizarRequest;
 import ecorota.api.controller.dto.response.CriarResponse;
 import ecorota.api.controller.dto.response.UsuarioResponse;
+import ecorota.api.enun.OpcaoTrajeto;
 import ecorota.api.infra.exception.SenhaImcompletaException;
 import ecorota.api.repository.UsuarioRepository;
 import ecorota.api.repository.entity.Usuario;
@@ -49,7 +51,6 @@ public class UsuarioService {
         }
 
         var senha = alterarSenha ? factory.criptografarSenha(request.getNovaSenha()) : usuarioBase.getPassword();
-
         usuarioRepository.update(usuario.getEmail(), request.getNome(), senha);
         usuario.setNome(request.getNome());
         return usuarioMapper.parse(usuario);
@@ -80,4 +81,16 @@ public class UsuarioService {
         var campoSenhaRepetida = Objects.isNull(senhaNovaRepetida) || senhaNovaRepetida.isEmpty();
         return !campoSenha && !campoSenhaRepetida;
     }
+
+    @Transactional
+    public UsuarioResponse atualizarPreferencia(UsuarioPreferenciaAtualizarRequest request, Usuario usuario) {
+        usuario.getPreferencia().setOnibusAtivo(request.isOnibusAtivo());
+        usuario.getPreferencia().setMetroAtivo(request.isMetroAtivo());
+        usuario.getPreferencia().setBicicletaAtivo(request.isBicicletaAtivo());
+        var opcaoTrajeto = OpcaoTrajeto.getOpcaoTrajeto(request.getOpcaoTrajeto());
+        usuario.getPreferencia().setOpcaoTrajeto(opcaoTrajeto);
+        usuarioRepository.updatePreferencia(usuario.getEmail(), request.isOnibusAtivo(), request.isMetroAtivo(), request.isBicicletaAtivo(), request.getOpcaoTrajeto());
+        return usuarioMapper.parse(usuario);
+    }
+
 }

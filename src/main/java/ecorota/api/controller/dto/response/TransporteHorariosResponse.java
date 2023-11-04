@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UsuarioResponse {
+import java.time.LocalDateTime;
 
-    private String nome;
-    private String email;
-    private PreferenciaResponse preferencia;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransporteHorariosResponse {
+
+    private long id;
+    private LocalDateTime data;
 
 }

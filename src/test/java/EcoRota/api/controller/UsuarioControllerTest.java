@@ -2,6 +2,7 @@ package EcoRota.api.controller;
 
 import ecorota.api.controller.dto.request.usuario.UsuarioCriarRequest;
 import ecorota.api.controller.dto.response.CriarResponse;
+import ecorota.api.controller.dto.response.PreferenciaResponse;
 import ecorota.api.controller.dto.response.UsuarioResponse;
 import ecorota.api.service.UsuarioService;
 import org.junit.jupiter.api.DisplayName;
@@ -52,11 +53,12 @@ class UsuarioControllerTest {
     void cadastrar_sucesso() throws Exception {
 
         var objReq = new UsuarioCriarRequest("Daniel", "teste1", "teste1");
-        var objEsperado = new UsuarioResponse("Daniel", "teste1");
+        var pref = new PreferenciaResponse(true, true, false, 2);
+        var objEsperado = new UsuarioResponse("Daniel", "teste1", pref);
         var jsonEsperado = respUsuarioJson.write(objEsperado).getJson();
 
         when(usuarioService.cadastrar(objReq))
-                .thenReturn(new CriarResponse(2L, new UsuarioResponse(objReq.getNome(), objReq.getEmail())));
+                .thenReturn(new CriarResponse(2L, new UsuarioResponse(objReq.getNome(), objReq.getEmail(), pref)));
 
         var resp = mockMvc.perform(
                         post("/usuario")

@@ -1,5 +1,7 @@
 package EcoRota.api.repository;
 
+import ecorota.api.enun.OpcaoTrajeto;
+import ecorota.api.repository.entity.Preferencia;
 import ecorota.api.repository.entity.Usuario;
 import ecorota.api.enun.Role;
 import ecorota.api.repository.UsuarioRepository;
@@ -36,7 +38,8 @@ class UsuarioRepositoryTest {
 
 
     private Usuario criarUsuario(String nome, String email, String senha, Role role) {
-        var usuario = new Usuario(null, nome, email, senha, role, true, null);
+        var preferencia = new Preferencia(true, true, false, OpcaoTrajeto.SUSTENTAVEL);
+        var usuario = new Usuario(null, nome, email, senha, role, true, null, preferencia);
         em.persist(usuario);
         return usuario;
     }

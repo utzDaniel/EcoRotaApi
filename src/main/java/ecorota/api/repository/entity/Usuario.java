@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Table(name = "usuarios", indexes = {@Index(name = "idx_usuario_email", columnList = "email")})
+@Table(name = "usuarios", indexes = {@Index(name = "idx_usuario_email", columnList = "eml")})
 public final class Usuario implements UserDetails {
 
     @Id
@@ -23,23 +23,27 @@ public final class Usuario implements UserDetails {
     private Long id;
 
     @Setter
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nom", nullable = false)
     private String nome;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "eml", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "senha", nullable = false)
+    @Column(name = "sen", nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
     private Role role;
 
-    @Column(name = "ativo", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "atv", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean ativo;
 
-    @Column(name = "codigo_verificador", length = 6)
+    @Column(name = "cod_vrf", length = 6)
     private String codigoVerificador;
+
+    @Embedded
+    private Preferencia preferencia;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

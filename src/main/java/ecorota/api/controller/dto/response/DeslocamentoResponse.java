@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioResponse {
+public class DeslocamentoResponse {
 
-    private String nome;
-    private String email;
-    private PreferenciaResponse preferencia;
+    private double distancia;
+    private double tempo;
+    private double carbono;
+    private TrajetoResponse trajeto;
 
 }

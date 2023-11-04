@@ -4,13 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioResponse {
+public class MapaResponse {
 
-    private String nome;
-    private String email;
-    private PreferenciaResponse preferencia;
+    private int posicaoX;
+    private int posicaoY;
+    private LocalResponse local;
+    private List<TrajetoResponse> trajetos;
 
 }
