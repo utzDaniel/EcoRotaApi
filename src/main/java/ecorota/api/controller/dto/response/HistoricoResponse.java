@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,9 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 public class HistoricoResponse {
 
-    private LocalResponse partida;
-    private LocalResponse destino;
-    private List<OpcoesDeslocamentoResponse> opcoes;
-    private LocalDateTime data;
+    private HistoricoRecursoResponse distancia;
+    private HistoricoRecursoResponse tempo;
+    private HistoricoRecursoResponse carbono;
+    private HistoricoRecursoResponse dinheiro;
+    private List<HistoricoItemResponse> item;
 
 }

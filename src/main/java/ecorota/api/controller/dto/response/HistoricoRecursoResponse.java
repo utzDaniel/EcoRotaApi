@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OpcoesDeslocamentoResponse {
+public class HistoricoRecursoResponse {
 
-    private List<DeslocamentoResponse> deslocamento;
-    private boolean escolhida;
+    private String nome;
+    private Double soma;
+    private String medida;
 
 }

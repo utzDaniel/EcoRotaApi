@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import ecorota.api.repository.entity.Usuario;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,8 +47,7 @@ public class TokenService {
                     .getSubject();
         } catch (TokenExpiredException exception) {
             throw new RuntimeException("Token JWT expirado!");
-        }
-        catch (JWTDecodeException exception) {
+        } catch (JWTDecodeException exception) {
             throw new RuntimeException("Token JWT inválido !");
         }
     }
