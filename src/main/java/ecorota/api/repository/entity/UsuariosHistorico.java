@@ -39,4 +39,11 @@ public final class UsuariosHistorico {
     @Column(name = "dat_inc")
     private LocalDateTime dataInclusao;
 
+    public UsuariosHistorico(Usuario usuario, Local localPartida, Local localDestino, List<OpcoesDeslocamento> opcoesDeslocamentos, LocalDateTime dataInclusao) {
+        this.usuario = usuario;
+        this.localPartida = localPartida;
+        this.localDestino = localDestino;
+        this.opcoesDeslocamentos = opcoesDeslocamentos;
+        this.dataInclusao = dataInclusao;
+    }
 }

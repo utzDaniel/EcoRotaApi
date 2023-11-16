@@ -2,6 +2,7 @@ package ecorota.api.controller;
 
 import ecorota.api.controller.dto.response.DominioResponse;
 import ecorota.api.service.DominioService;
+import ecorota.api.service.MapaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

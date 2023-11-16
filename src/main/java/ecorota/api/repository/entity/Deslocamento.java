@@ -19,13 +19,13 @@ public final class Deslocamento {
     private long id;
 
     @Column(name = "dtc")
-    private double distancia;
+    private int distancia;
 
     @Column(name = "tmp")
-    private double tempo;
+    private int tempo;
 
     @Column(name = "ems_crb")
-    private double emissaoCarbono;
+    private int emissaoCarbono;
 
     @ManyToOne
     @JoinColumn(name = "id_opc_dlc")

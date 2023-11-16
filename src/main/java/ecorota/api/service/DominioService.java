@@ -3,10 +3,7 @@ package ecorota.api.service;
 import ecorota.api.controller.dto.response.DominioResponse;
 import ecorota.api.enun.OpcaoTrajeto;
 import ecorota.api.enun.Transporte;
-import ecorota.api.repository.LocalRepository;
-import ecorota.api.repository.UsuarioRepository;
-import ecorota.api.service.factory.UsuarioFactory;
-import ecorota.api.service.mapper.UsuarioMapper;
+import ecorota.api.repository.LocaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +14,7 @@ import java.util.List;
 public class DominioService {
 
     @Autowired
-    private LocalRepository localRepository;
+    private LocaRepository localRepository;
 
 
     public List<DominioResponse> listarOpcaoTrajeto() {

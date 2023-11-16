@@ -23,9 +23,9 @@ CREATE TABLE `opcoes_deslocamento` (
 DROP TABLE IF EXISTS `deslocamento`;
 CREATE TABLE `deslocamento` (
    `id` bigint(20) NOT NULL AUTO_INCREMENT,
-   `dtc` DOUBLE NOT NULL,
-   `tmp` DOUBLE NOT NULL,
-   `ems_crb` DOUBLE NOT NULL,
+   `dtc` INT NOT NULL,
+   `tmp` INT NOT NULL,
+   `ems_crb` INT NOT NULL,
    `id_opc_dlc` bigint(20) NOT NULL,
    `id_tjt` bigint(20) NOT NULL,
     PRIMARY KEY (`id`),
