@@ -1,6 +1,7 @@
 package ecorota.api.controller;
 
 import ecorota.api.controller.dto.response.DominioResponse;
+import ecorota.api.controller.dto.response.MapaLocalResponse;
 import ecorota.api.service.DominioService;
 import ecorota.api.service.MapaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class DominioController {
     }
 
     @GetMapping("/local")
-    public ResponseEntity<List<DominioResponse>> listarLocal() {
+    public ResponseEntity<List<MapaLocalResponse>> listarLocal() {
         var list = dominioService.listarLocal();
         return ResponseEntity.ok(list);
     }

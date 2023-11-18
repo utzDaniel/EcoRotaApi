@@ -1,6 +1,8 @@
 package ecorota.api.service;
 
 import ecorota.api.controller.dto.response.DominioResponse;
+import ecorota.api.controller.dto.response.MapaLocalResponse;
+import ecorota.api.controller.dto.response.PointResponse;
 import ecorota.api.enun.OpcaoTrajeto;
 import ecorota.api.enun.Transporte;
 import ecorota.api.repository.LocaRepository;
@@ -32,11 +34,10 @@ public class DominioService {
                 ).toList();
     }
 
-    public List<DominioResponse> listarLocal() {
-        return this.localRepository
-                .findAll()
+    public List<MapaLocalResponse> listarLocal() {
+        return this.localRepository.buscarMapaLocal()
                 .stream()
-                .map(op -> new DominioResponse((int)op.getId(), op.getNome())
+                .map(op -> new MapaLocalResponse(op.getId(), op.getNome(), new PointResponse(op.getX(), op.getY()))
                 ).toList();
     }
 }
