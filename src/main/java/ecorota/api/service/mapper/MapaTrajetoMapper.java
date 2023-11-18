@@ -111,7 +111,8 @@ public class MapaTrajetoMapper {
         var desl1 = new DeslocamentoResponse(transporte.getIdTrajeto(), transporte.getNome(), -1, null, inicioPoints);
         deslocamento.add(desl1);
 
-        var desl2 = new DeslocamentoResponse(1L, Transporte.ONIBUS.getNome(), listTrajetoMapa.get(0).getNumLinha(), null, meioPoints);
+        Long idTrajeto = listTrajetoMapa.stream().filter(TrajetoMapa::getPonto).mapToLong(TrajetoMapa::getIdTrajeto).findFirst().orElse(0L);
+        var desl2 = new DeslocamentoResponse(idTrajeto, Transporte.ONIBUS.getNome(), listTrajetoMapa.get(0).getNumLinha(), null, meioPoints);
         deslocamento.add(desl2);
 
         if (!fimPoints.isEmpty()) {
